@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sahayak Frontend
 
-## Getting Started
+**Live:** https://sahayak-frontend-jade.vercel.app
 
-First, run the development server:
+Next.js frontend for the Sahayak AI assistant — a chat interface built for Mumbai gig workers to ask questions about their rights, wages, jobs, and government schemes.
+
+---
+
+## Features
+
+- **Streaming responses** — answers appear word by word via Server-Sent Events
+- **Agent transparency** — shows which tools are running before the answer arrives
+- **Multilingual** — auto-detects language, supports English, Hindi, Marathi
+- **Cached answers** — ⚡ badge on instant cached responses
+- **Mobile first** — designed for smartphone users
+- **Suggested questions** — quick-start prompts on empty state
+
+---
+
+## Tech Stack
+
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS
+- Deployed on Vercel
+
+---
+
+## Setup
+
+```bash
+git clone https://github.com/aarugit797/sahayak-frontend
+cd sahayak-frontend
+npm install
+```
+
+Create `.env.local`:
+```
+NEXT_PUBLIC_API_URL=https://sahayak-1080882830155.us-central1.run.app
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# visit http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Connecting to backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The frontend calls two endpoints:
 
-## Learn More
+- `POST /api/query/stream` — streaming SSE endpoint (used by the chat UI)
+- `POST /api/query` — standard JSON endpoint (for direct API access)
 
-To learn more about Next.js, take a look at the following resources:
+The streaming endpoint sends three event types:
+```
+{"type": "status", "content": "🔍 Analyzing..."}  → progress indicator
+{"type": "token",  "content": "word "}             → append to answer
+{"type": "done",   "cached": false}                → stream complete
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+Connected to GitHub — Vercel auto-deploys on every push to `main`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set `NEXT_PUBLIC_API_URL` in Vercel environment variables to point to your backend URL.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Backend
+
+The backend repo is at [Mumbai_Informal_Gig](https://github.com/aarugit797/Mumbai_Informal_Gig).
